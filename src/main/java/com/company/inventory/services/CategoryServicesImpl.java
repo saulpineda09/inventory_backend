@@ -63,6 +63,70 @@ public class CategoryServicesImpl implements ICategoryService{
 		} 
 		return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK); 
 	  }
+
+	
+	@Override
+	@Transactional 
+	public ResponseEntity<CategoryResponseRest> save(Category category) {
+		CategoryResponseRest response = new CategoryResponseRest(); 
+		List<Category>list = new ArrayList<>(); 
+		
+		try{
+			Category categorySaved = categoryDao.save(category); 
+			if(categorySaved != null) {
+				list.add(categorySaved); 
+				response.getCategoryResponse().setCategory(list);
+				response.setMetadata("Respuesta OK", "00", "CATEGORIA GUARDADA"); 
+			}else {
+				response.setMetadata("Respuesta NO OK", "-1", "Categoria no guardada");  
+				return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.BAD_REQUEST); 
+			}
+		    
+		}catch(Exception e) {
+			response.setMetadata("Respuesta NO OK", "-1", "Error al guardar categoria"); 
+			e.getStackTrace(); 
+			
+			return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
+		} 
+		return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK); 
+	   }
+
+	@Override
+	@Transactional
+	public ResponseEntity<CategoryResponseRest> update(Category category, Long id) {
+		CategoryResponseRest response = new CategoryResponseRest(); 
+		List<Category>list = new ArrayList<>(); 
+		
+		try{
+			Optional<Category>categorySearch=categoryDao.findById(id); 
+			if(categorySearch.isPresent()) {
+				//si existe esa categoria se actualiza
+				categorySearch.get().setName(category.getName());
+				categorySearch.get().setDescription(category.getDescription());
+				Category categoryToUpdate = categoryDao.save(categorySearch.get());
+					
+					if(categoryToUpdate != null) {
+						list.add(categoryToUpdate); 
+						response.getCategoryResponse().setCategory(list);
+						response.setMetadata("Respuesta OK", "00", "CATEGORIA ACTUALIZADA!"); 
+					}else {
+						response.setMetadata("Respuesta NO OK", "-1", "Categoria no actualizada");  
+						return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.BAD_REQUEST); 
+						
+					}
+			}else {
+				response.setMetadata("Respuesta NO OK", "-1", "Categoria no encontrada");  
+				return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.NOT_FOUND); 
+			}
+			
+		}catch(Exception e) {
+			response.setMetadata("Respuesta NO OK", "-1", "Error al guardar categoria"); 
+			e.getStackTrace(); 
+			
+			return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
+		} 
+		return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK); 
+	  }
 	}
 
 	
