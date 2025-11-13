@@ -12,7 +12,7 @@ public interface ICategoryService {
 	public ResponseEntity<CategoryResponseRest> searchById(Long id); //busca por id 
 	public ResponseEntity<CategoryResponseRest> save(Category category); //guardar categoria
 	public ResponseEntity<CategoryResponseRest> update(Category category, Long id); //actualizar caregoia
-	
+	public ResponseEntity<CategoryResponseRest> deleteById(Long id); //elimina un registro por id
 		
 	 
 }

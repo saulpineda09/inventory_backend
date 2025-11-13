@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class CategoryServicesImpl implements ICategoryService{
 	@Override
 	@Transactional(readOnly=true) //esto es para la bd, readOnly es por si pasa algo lo dejamos como transaccion
 	
-	
+	//metodo buscar 
 	public ResponseEntity<CategoryResponseRest> search() {
 		CategoryResponseRest response = new CategoryResponseRest(); 
 		
@@ -39,7 +40,7 @@ public class CategoryServicesImpl implements ICategoryService{
 	
 	@Override
 	@Transactional(readOnly = true)
-	
+	//metodo buscar por id
 	public ResponseEntity<CategoryResponseRest> searchById(Long id){ 
 		CategoryResponseRest response = new CategoryResponseRest(); 
 		List<Category>list = new ArrayList<>(); 
@@ -64,7 +65,7 @@ public class CategoryServicesImpl implements ICategoryService{
 		return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK); 
 	  }
 
-	
+	//metodo guardar 
 	@Override
 	@Transactional 
 	public ResponseEntity<CategoryResponseRest> save(Category category) {
@@ -91,6 +92,7 @@ public class CategoryServicesImpl implements ICategoryService{
 		return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK); 
 	   }
 
+	//metodo actualizar
 	@Override
 	@Transactional
 	public ResponseEntity<CategoryResponseRest> update(Category category, Long id) {
@@ -127,6 +129,29 @@ public class CategoryServicesImpl implements ICategoryService{
 		} 
 		return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK); 
 	  }
+	
+	
+	//metodo eliminar por id
+	@Override
+	@Transactional
+	public ResponseEntity<CategoryResponseRest> deleteById(Long id){
+		
+		CategoryResponseRest response = new CategoryResponseRest(); 
+		
+		try {
+			categoryDao.deleteById(id);
+			response.setMetadata("respuesta ok", "00", "Registro eliminado");
+		}catch(Exception e) {
+			response.setMetadata("Respuesta ok", "-1", "Error al eliminar");
+			e.getStackTrace(); 
+			return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
+		
+		return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK); 
+		
+	}
+	
+	
 	}
 
 	
