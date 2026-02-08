@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 
 //herencia de responseRest a esta clase 
-public class CategoryResponseRest extends ResponseRest{
+    public class CategoryResponseRest extends ResponseRest{
 	private CategoryResponse categoryResponse =new CategoryResponse();
 	
 }
